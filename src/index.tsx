@@ -1,6 +1,8 @@
 import * as React from 'react';
+import { Text } from 'react-native';
 
-// Delete me
-export const Thing = () => {
-  return <div>the snozzberries taste like snozzberries</div>;
-};
+function MyLib() {
+  return <Text>WORKS!</Text>;
+}
+
+export { MyLib };
