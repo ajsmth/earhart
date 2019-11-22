@@ -14,7 +14,8 @@
     "lint": "tsdx lint"
   },
   "peerDependencies": {
-    "react": ">=16"
+    "react": ">=16",
+    "react-native": "^0.61.4"
   },
   "husky": {
     "hooks": {
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
+    "@babel/runtime": "^7.7.2",
     "@testing-library/jest-native": "^3.0.3",
     "@testing-library/react-native": "^5.0.1",
     "@types/jest": "^24.0.23",

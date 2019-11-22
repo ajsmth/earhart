@@ -21,15 +21,18 @@ module.exports = {
       },
     }),
   },
-  watchFolders: [
-    path.resolve(__dirname, '..'),
-  ],
+  watchFolders: [path.resolve(__dirname, '../src')],
   resolver: {
-    blacklistRE: blacklist([
-      new RegExp(
-        `^${escape(path.resolve(__dirname, '..', 'node_modules'))}\/.*$`,
-      ),
-    ]),
-    providesModuleNodeModules: ['@babel/runtime', ...peerDependencies],
+    extraNodeModules: new Proxy(
+      {},
+      {
+        get: (target, name) => {
+          if (target.hasOwnProperty(name)) {
+            return target[name]
+          }
+          return path.join(process.cwd(), `node_modules/${name}`)
+        },
+      },
+    ),
   },
 };

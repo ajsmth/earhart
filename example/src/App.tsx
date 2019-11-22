@@ -24,7 +24,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import {MyLib} from 'my-lib';
+import {MyLib} from 'my-library';
 
 function App() {
   return (
