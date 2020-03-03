@@ -1,4 +1,4 @@
-package com.example;
+package com.earhart;
 
 import android.app.Application;
 import android.content.Context;

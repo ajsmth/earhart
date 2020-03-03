@@ -18,49 +18,39 @@ import {
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-import {Navigation} from 'earhart';
+import {Navigation, Tabs, Routes, Route, Link, Redirect} from 'earhart';
 
 function App() {
-  return <View />;
-}
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <Navigation>
+        <Tabs>
+          <Routes>
+            <Route path="home">
+              <View>
+                <Text>Home</Text>
+              </View>
+            </Route>
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
+            <Route path="settings">
+              <View>
+                <Text>Settings</Text>
+              </View>
+            </Route>
+
+            <Redirect to="/home" />
+          </Routes>
+
+          <Link to="home">
+            <Text>To Home</Text>
+          </Link>
+          <Link to="settings">
+            <Text>To Settings</Text>
+          </Link>
+        </Tabs>
+      </Navigation>
+    </SafeAreaView>
+  );
+}
 
 export default App;

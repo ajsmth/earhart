@@ -1,5 +1,5 @@
 {
-  "name": "example",
+  "name": "Earhart",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -13,9 +13,11 @@
     "shake:android": "adb shell input keyevent 82"
   },
   "dependencies": {
+    "history": "^5.0.0-beta.5",
     "react": "^16.11.0",
     "react-native": "^0.61.4",
-    "react-native-gesture-handler": "^1.6.0"
+    "react-native-gesture-handler": "^1.6.0",
+    "react-native-rename": "^2.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
@@ -29,26 +31,8 @@
     "escape-string-regexp": "^2.0.0",
     "eslint": "^6.4.0",
     "jest": "^24.9.0",
-    "metro-react-native-babel-preset": "^0.56.0",
+    "metro-react-native-babel-preset": "^0.55.0",
     "react-devtools": "3",
     "react-test-renderer": "^16.11.0"
-  },
-  "jest": {
-    "preset": "@testing-library/react-native",
-    "transformIgnorePatterns": [
-      "node_modules/(?!(react-native|react-native-screens|react-native-reanimated|earhart)/)"
-    ],
-    "setupFilesAfterEnv": [
-      "@testing-library/react-native/cleanup-after-each",
-      "./mock.js"
-    ],
-    "transform": {
-      "^.+\\.(t)sx?$": "ts-jest"
-    },
-    "globals": {
-      "ts-jest": {
-        "babelConfig": true
-      }
-    }
   }
 }

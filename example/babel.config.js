@@ -6,7 +6,6 @@ module.exports = {
       {
         alias: {
           earhart: '../src/index',
-          'test-utils': '../test-utils',
         },
       },
     ],

@@ -5,9 +5,7 @@
   "module": "dist/earhart.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist",
-    "test-utils",
-    "test-utils.d.ts"
+    "dist"
   ],
   "scripts": {
     "start": "tsdx watch",
@@ -61,8 +59,7 @@
       "node_modules/(?!(react-native|react-native-screens|react-native-reanimated)/)"
     ],
     "setupFilesAfterEnv": [
-      "@testing-library/react-native/cleanup-after-each",
-      "./mock"
+      "@testing-library/react-native/cleanup-after-each"
     ],
     "transform": {
       "^.+\\.(t)sx?$": "ts-jest"

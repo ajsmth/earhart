@@ -44,7 +44,7 @@ function MyNavigation() {
 
 ## How is it the same?
 
-The majority of the routing logic and components are mostly unmodified from react-router. This means most of the good stuff from react-router is still at your disposal.
+The majority of the routing logic, hooks, and components are mostly unmodified from react-router. This means most of the good stuff is still at your disposal.
 
 ## Installation
 
