@@ -16,33 +16,12 @@ import {
   StatusBar,
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-import {MyLib} from 'my-library';
+import {Navigation} from 'earhart';
 
 function App() {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-
-          <View style={styles.body}>
-            <MyLib />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
+  return <View />;
 }
 
 const styles = StyleSheet.create({

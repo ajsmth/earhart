@@ -14,15 +14,16 @@
   },
   "dependencies": {
     "react": "^16.11.0",
-    "react-native": "^0.61.4"
+    "react-native": "^0.61.4",
+    "react-native-gesture-handler": "^1.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
-    "@testing-library/jest-native": "^3.0.2",
-    "@types/react-native": "^0.60.17",
     "@react-native-community/eslint-config": "^0.0.5",
+    "@testing-library/jest-native": "^3.0.2",
     "@testing-library/react-native": "^5.0.0",
+    "@types/react-native": "^0.60.17",
     "babel-jest": "^24.9.0",
     "babel-plugin-module-resolver": "^3.2.0",
     "escape-string-regexp": "^2.0.0",
@@ -35,13 +36,19 @@
   "jest": {
     "preset": "@testing-library/react-native",
     "transformIgnorePatterns": [
-      "node_modules/(?!(react-native|react-native-screens|react-native-reanimated)/)"
+      "node_modules/(?!(react-native|react-native-screens|react-native-reanimated|earhart)/)"
     ],
     "setupFilesAfterEnv": [
-      "@testing-library/react-native/cleanup-after-each"
+      "@testing-library/react-native/cleanup-after-each",
+      "./mock.js"
     ],
     "transform": {
       "^.+\\.(t)sx?$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "babelConfig": true
+      }
     }
   }
 }

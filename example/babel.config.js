@@ -5,7 +5,8 @@ module.exports = {
       'module-resolver',
       {
         alias: {
-          'my-library': '../src/index',
+          earhart: '../src/index',
+          'test-utils': '../test-utils',
         },
       },
     ],

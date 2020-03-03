@@ -13,17 +13,18 @@
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
-    "noImplicitThis": true,
+    "noImplicitThis": false,
     "alwaysStrict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
       "*": ["src/*", "node_modules/*"],
-      "my-library": ["src/index"]
+      "earhart": ["src/index"],
+      "test-utils": ["test-utils"]
     },
     "jsx": "react",
     "esModuleInterop": true
