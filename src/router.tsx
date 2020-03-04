@@ -436,7 +436,7 @@ function UnfocusedProvider({ children, unfocused }: any) {
 }
 
 export {
-  MemoryRouter as Navigation,
+  MemoryRouter as NativeRouter,
   Routes,
   Route,
   Redirect,

@@ -18,12 +18,12 @@ import {
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-import {Navigation, Tabs, Routes, Route, Link, Redirect} from 'earhart';
+import {NativeRouter, Tabs, Routes, Route, Link, Redirect} from 'earhart';
 
 function App() {
   return (
     <SafeAreaView style={{flex: 1}}>
-      <Navigation>
+      <NativeRouter>
         <Tabs>
           <Routes>
             <Route path="home">
@@ -48,7 +48,7 @@ function App() {
             <Text>To Settings</Text>
           </Link>
         </Tabs>
-      </Navigation>
+      </NativeRouter>
     </SafeAreaView>
   );
 }
