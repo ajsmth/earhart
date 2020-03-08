@@ -154,13 +154,27 @@ function KeepAliveSwitchScreenContainer({ children, style }: IRoutesContainer) {
     }).start();
   }, [activeIndex, animatedIndex]);
 
+  const [layout, setLayout] = React.useState<LayoutRectangle>(EMPTY_RECT);
+
+  function handleLayout(event: LayoutChangeEvent) {
+    setLayout(event.nativeEvent.layout);
+  }
+
+  const transformOffset = {
+    translateX: layout.width * activeIndex,
+  };
+
   return (
-    <View style={{ flex: 1, ...style }}>
+    <View
+      style={{ flex: 1, ...style, transform: [transformOffset] }}
+      onLayout={handleLayout}
+    >
       {React.Children.map(children, (child, index) => {
         return (
           <View
             style={{
               display: activeIndex === index ? 'flex' : 'none',
+              transform: [{ translateX: layout.width * index * -1 }],
               ...StyleSheet.absoluteFillObject,
             }}
           >

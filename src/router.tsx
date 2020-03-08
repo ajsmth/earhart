@@ -332,8 +332,10 @@ interface ILink extends TouchableOpacityProps {
   children: React.ReactNode;
 }
 
+const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+
 function Link({
-  as: Component = TouchableOpacity,
+  as: Component = AnimatedTouchable,
   onPress,
   style,
   replace = false,
@@ -342,7 +344,9 @@ function Link({
   to,
   ...rest
 }: ILink) {
-  let { navigate } = React.useContext(NavigatorContext);
+  const route = useRoute();
+  let { params } = React.useContext(NavigatorContext);
+  const navigate = useNavigate(route.path, params);
 
   return (
     <Component

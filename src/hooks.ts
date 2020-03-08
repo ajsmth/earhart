@@ -1,5 +1,12 @@
 import React from 'react';
-import { BackHandler, Linking, Alert, Animated, ViewStyle } from 'react-native';
+import {
+  BackHandler,
+  Linking,
+  Alert,
+  Animated,
+  ViewStyle,
+  InteractionManager,
+} from 'react-native';
 import {
   useRouter,
   useRoute,
@@ -156,7 +163,13 @@ function useInterpolation(interpolation: any, index?: number) {
 
   return styles;
 }
-Prompt;
+
+function useFocus() {
+  const index = React.useContext(IndexContext);
+  const { match } = useNavigator();
+
+  return match ? match.index === index : false;
+}
 
 export {
   useBlocker,
@@ -165,6 +178,7 @@ export {
   usePrompt,
   useInterpolation,
   Prompt,
+  useFocus,
 };
 
 function interpolateWithConfig(
