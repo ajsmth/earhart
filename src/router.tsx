@@ -138,10 +138,20 @@ function Navigator({ children }: INavigator) {
   const animatedIndex = React.useRef(new Animated.Value(0));
   const route = React.useContext(RouteContext);
 
-  const params = {
-    ...parentMatch?.params,
-    ...match?.params,
-  };
+  // cache this in state so that new params override old but we don't lose params computed from
+  // the location when popping a screen off of the stack
+  const [params, setParams] = React.useState(parentMatch?.params);
+
+  React.useEffect(() => {
+    const params = {
+      ...parentMatch?.params,
+      ...match?.params,
+    };
+
+    setParams(old => {
+      return { ...old, ...params };
+    });
+  }, [match]);
 
   React.useEffect(() => {
     if (match?.route?.redirectTo) {
@@ -190,9 +200,14 @@ function useNavigate(path: string = '/', params = {}): NavigateFn {
 
       // remove nested wildcards in route path
       path = path.replace('/*', '');
+
+      // remove wildcard params
+      delete params['*'];
+
       // inject params into pathname
       const pathname = generatePath(path, params);
-      let relativeTo = resolveLocation(to, pathname);
+      const toWithParams = generatePath(to, params);
+      let relativeTo = resolveLocation(toWithParams, pathname);
 
       // exit early if the pathname hasn't changed
       if (relativeTo.pathname === location.pathname) {
@@ -269,10 +284,10 @@ function createRoutesFromChildren(children: React.ReactNode, basename = '/') {
   const routes: IRoute[] = [];
 
   React.Children.forEach(children, (child: any, index: number) => {
-    let props = child.props as IRouteProps;
+    let props = { ...child.props } as IRouteProps;
     basename = basename.replace('*', '');
 
-    const route: IRoute = {
+    let route: IRoute = {
       index: index,
       path: joinPaths([basename, props.path]),
       children: props.children || null,

@@ -33,17 +33,11 @@ function useHardwareBackButton() {
     function handleHardwardBackPress() {
       if (history.index === 0) {
         // do nothing, we're already on the home screen
+        return false;
       } else {
         navigate(-1);
+        return true;
       }
-
-      // TODO
-      // if (this.history.index === 0) {
-      //   return false; // home screen
-      // } else {
-      //   this.history.goBack();
-      //   return true;
-      // }
     }
 
     BackHandler.addEventListener(
@@ -159,7 +153,7 @@ function useInterpolation(interpolation: any, index?: number) {
 
   const styles = React.useMemo(() => {
     return interpolateWithConfig(offset, interpolation);
-  }, [interpolation]);
+  }, [interpolation, offset]);
 
   return styles;
 }
@@ -171,6 +165,22 @@ function useFocus() {
   return match ? match.index === index : false;
 }
 
+// ref: https://github.com/react-navigation/hooks/issues/62#issuecomment-593531670
+function useFocusLazy() {
+  const isFocused = useFocus();
+  const [isFocusedLazy, setIsFocusedLazy] = React.useState(false);
+
+  React.useEffect(() => {
+    const { cancel } = InteractionManager.runAfterInteractions(() => {
+      setIsFocusedLazy(isFocused);
+    });
+
+    return () => cancel();
+  }, [isFocused]);
+
+  return isFocusedLazy;
+}
+
 export {
   useBlocker,
   useDeepLinking,
@@ -179,6 +189,7 @@ export {
   useInterpolation,
   Prompt,
   useFocus,
+  useFocusLazy,
 };
 
 function interpolateWithConfig(
