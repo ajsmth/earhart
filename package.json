@@ -1,6 +1,6 @@
 {
   "name": "earhart",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "dist/index.js",
   "module": "dist/earhart.esm.js",
   "typings": "dist/index.d.ts",
@@ -11,7 +11,8 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test --env=jsdom",
-    "lint": "tsdx lint"
+    "lint": "tsdx lint",
+    "prepublishOnly": "tsdx build"
   },
   "peerDependencies": {
     "react": ">=16",
