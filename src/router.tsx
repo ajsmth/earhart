@@ -138,9 +138,16 @@ function Navigator({ children }: INavigator) {
   const animatedIndex = React.useRef(new Animated.Value(0));
   const route = React.useContext(RouteContext);
 
-  // cache this in state so that new params override old but we don't lose params computed from
+  // keep track of param sso that new params override old but we don't lose params computed from
   // the location when popping a screen off of the stack
-  const [params, setParams] = React.useState(parentMatch?.params);
+  const [lastMatchParams, setLastMatchParams] = React.useState(
+    parentMatch?.params
+  );
+
+  const computedParams = {
+    ...parentMatch?.params,
+    ...match?.params,
+  };
 
   React.useEffect(() => {
     const params = {
@@ -148,10 +155,15 @@ function Navigator({ children }: INavigator) {
       ...match?.params,
     };
 
-    setParams(old => {
+    setLastMatchParams((old: any) => {
       return { ...old, ...params };
     });
   }, [match]);
+
+  const params = {
+    ...lastMatchParams,
+    ...computedParams,
+  };
 
   React.useEffect(() => {
     if (match?.route?.redirectTo) {
@@ -202,6 +214,7 @@ function useNavigate(path: string = '/', params = {}): NavigateFn {
       path = path.replace('/*', '');
 
       // remove wildcard params
+      // @ts-ignore
       delete params['*'];
 
       // inject params into pathname

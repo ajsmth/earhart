@@ -21,16 +21,18 @@ module.exports = {
       },
     }),
   },
-  watchFolders: [path.resolve(__dirname, '../src')],
+  watchFolders: [
+    path.resolve(__dirname, '../src', path.resolve(__dirname, '../dist')),
+  ],
   resolver: {
     extraNodeModules: new Proxy(
       {},
       {
         get: (target, name) => {
           if (target.hasOwnProperty(name)) {
-            return target[name]
+            return target[name];
           }
-          return path.join(process.cwd(), `node_modules/${name}`)
+          return path.join(process.cwd(), `node_modules/${name}`);
         },
       },
     ),

@@ -18,7 +18,15 @@ import {
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-import {NativeRouter, Tabs, Routes, Route, Link, Redirect} from 'earhart';
+import {
+  NativeRouter,
+  Tabs,
+  Routes,
+  Route,
+  Link,
+  Redirect,
+  useRouter,
+} from '../../dist';
 
 function App() {
   return (
@@ -38,7 +46,7 @@ function App() {
               </View>
             </Route>
 
-            <Redirect to="/home" />
+            <Redirect to="home" />
           </Routes>
 
           <Link to="home">
@@ -48,9 +56,15 @@ function App() {
             <Text>To Settings</Text>
           </Link>
         </Tabs>
+
+        <Location />
       </NativeRouter>
     </SafeAreaView>
   );
 }
 
+function Location() {
+  const {location} = useRouter();
+  return <Text>{location.pathname}</Text>;
+}
 export default App;
