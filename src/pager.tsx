@@ -197,6 +197,8 @@ function Pager({
 
         dragStartValue.current = next;
         nextIndex.current = next;
+        // reset drag - android holds onto this value and triggers navigation
+        dragPercentage.current = 0;
 
         Animated.spring(animatedIndex, {
           toValue: next,

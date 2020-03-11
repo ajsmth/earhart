@@ -7,6 +7,7 @@ export interface IRouteProps {
 export interface IRoute extends IRouteProps {
   index: number;
   redirectTo?: string;
+  props: any;
 }
 
 export interface IMatch {

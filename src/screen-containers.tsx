@@ -38,7 +38,7 @@ function Tabs({ children }: ITabs) {
   );
 }
 
-interface IRoutesContainer {
+export interface IRoutesContainer {
   children: React.ReactNode;
   routes: IRoute[];
   style?: ViewStyle;
@@ -108,21 +108,8 @@ function Switch({ children, keepAlive }: ISwitch) {
 }
 
 function SwitchScreenContainer({ children, style }: IRoutesContainer) {
-  const { match, animatedIndex } = useNavigator();
+  const { match } = useNavigator();
   const activeIndex = match ? match.index : -1;
-
-  React.useEffect(() => {
-    Animated.spring(animatedIndex, {
-      toValue: activeIndex,
-      stiffness: 1000,
-      damping: 500,
-      mass: 3,
-      overshootClamping: false,
-      restDisplacementThreshold: 0.01,
-      restSpeedThreshold: 0.01,
-      useNativeDriver: true,
-    }).start();
-  }, [activeIndex, animatedIndex]);
 
   return (
     <View style={{ flex: 1, ...style }}>
@@ -138,21 +125,8 @@ function SwitchScreenContainer({ children, style }: IRoutesContainer) {
 }
 
 function KeepAliveSwitchScreenContainer({ children, style }: IRoutesContainer) {
-  const { match, animatedIndex } = useNavigator();
+  const { match } = useNavigator();
   const activeIndex = match ? match.index : -1;
-
-  React.useEffect(() => {
-    Animated.spring(animatedIndex, {
-      toValue: activeIndex,
-      stiffness: 1000,
-      damping: 500,
-      mass: 3,
-      overshootClamping: false,
-      restDisplacementThreshold: 0.01,
-      restSpeedThreshold: 0.01,
-      useNativeDriver: true,
-    }).start();
-  }, [activeIndex, animatedIndex]);
 
   const [layout, setLayout] = React.useState<LayoutRectangle>(EMPTY_RECT);
 

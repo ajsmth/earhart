@@ -1,18 +1,8 @@
 import React from 'react';
-import {
-  MemoryHistory,
-  Location,
-  createMemoryHistory,
-  Unlistener,
-} from 'history';
+import { MemoryHistory, Location, createMemoryHistory } from 'history';
 import { IRoute, IMatch, IRouteProps } from './types';
-import {
-  ViewStyle,
-  View,
-  TouchableOpacity,
-  TouchableOpacityProps,
-  Animated,
-} from 'react-native';
+import { ViewStyle, View, TouchableOpacityProps, Animated } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
   joinPaths,
   compilePath,
@@ -135,6 +125,7 @@ const RouteContext = React.createContext<IRoute>({
   path: '/',
   index: -1,
   children: null,
+  props: {},
 });
 
 interface INavigator {
@@ -142,11 +133,13 @@ interface INavigator {
 }
 
 function Navigator({ children }: INavigator) {
+  const { match: parentMatch } = useNavigator();
   const [match, setMatch] = React.useState<IMatch | undefined>(undefined);
   const animatedIndex = React.useRef(new Animated.Value(0));
   const route = React.useContext(RouteContext);
 
   const params = {
+    ...parentMatch?.params,
     ...match?.params,
   };
 
@@ -187,7 +180,7 @@ interface NavigateOptions {
 }
 
 function useNavigate(path: string = '/', params = {}): NavigateFn {
-  const { history, pending } = useRouter();
+  const { history, pending, location } = useRouter();
 
   function navigate(to: string | number, options: NavigateOptions = {}) {
     if (typeof to === 'number') {
@@ -200,6 +193,11 @@ function useNavigate(path: string = '/', params = {}): NavigateFn {
       // inject params into pathname
       const pathname = generatePath(path, params);
       let relativeTo = resolveLocation(to, pathname);
+
+      // exit early if the pathname hasn't changed
+      if (relativeTo.pathname === location.pathname) {
+        return;
+      }
 
       // If we are pending transition, use REPLACE instead of PUSH.
       // This will prevent URLs that we started navigating to but
@@ -230,14 +228,17 @@ interface IRoutes {
 
 function Routes({ children, style }: IRoutes) {
   const route = useRoute();
-  const setMatch = React.useContext(SetMatchContext);
   const { location } = useRouter();
+  const setMatch = React.useContext(SetMatchContext);
   const Container = React.useContext(RoutesContainerContext);
 
-  const routes = createRoutesFromChildren(children, route.path);
+  const routes = React.useMemo(() => {
+    return createRoutesFromChildren(children, route.path);
+  }, [children, route.path]);
 
   React.useEffect(() => {
     const match = findBestMatchingRoute(routes, location.pathname);
+
     if (match) {
       setMatch(match);
     }
@@ -275,9 +276,11 @@ function createRoutesFromChildren(children: React.ReactNode, basename = '/') {
       index: index,
       path: joinPaths([basename, props.path]),
       children: props.children || null,
+      props,
     };
 
     if (props.to) {
+      props.to = props.to.replace('/*', '');
       route.redirectTo = props.to;
     }
 
@@ -332,10 +335,8 @@ interface ILink extends TouchableOpacityProps {
   children: React.ReactNode;
 }
 
-const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
-
 function Link({
-  as: Component = AnimatedTouchable,
+  as: Component = TouchableOpacity,
   onPress,
   style,
   replace = false,
@@ -351,7 +352,7 @@ function Link({
   return (
     <Component
       {...rest}
-      style={style}
+      containerStyle={style}
       onPress={(event: any) => {
         if (onPress) onPress(event);
         navigate(to, { replace, state });
