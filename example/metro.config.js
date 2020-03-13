@@ -22,7 +22,7 @@ module.exports = {
     }),
   },
   watchFolders: [
-    path.resolve(__dirname, '../src', path.resolve(__dirname, '../dist')),
+    path.resolve(__dirname, '../src', path.resolve(__dirname, '../src')),
   ],
   resolver: {
     extraNodeModules: new Proxy(

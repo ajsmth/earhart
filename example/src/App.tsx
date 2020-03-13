@@ -26,22 +26,28 @@ import {
   Link,
   Redirect,
   useRouter,
-} from '../../dist';
+  Stack,
+} from '../../src/index';
 
 function App() {
   return (
     <SafeAreaView style={{flex: 1}}>
       <NativeRouter>
-        <Tabs>
+        <Stack>
           <Routes>
             <Route path="home">
-              <View>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
                 <Text>Home</Text>
               </View>
             </Route>
 
             <Route path="settings">
-              <View>
+              <View style={{flex: 1, backgroundColor: 'red'}}>
                 <Text>Settings</Text>
               </View>
             </Route>
@@ -55,7 +61,7 @@ function App() {
           <Link to="settings">
             <Text>To Settings</Text>
           </Link>
-        </Tabs>
+        </Stack>
 
         <Location />
       </NativeRouter>
