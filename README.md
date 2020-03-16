@@ -109,9 +109,9 @@ function MyForm() {
 
 ### Navigators
 
-- native stack
-- native switch
-- shared element transitions
+- native stack: https://github.com/ajsmth/earhart-native
+- native switch: https://github.com/ajsmth/earhart-native
+- shared element transitions: https://github.com/ajsmth/earhart-shared-element
 
 ### Utilities
 
