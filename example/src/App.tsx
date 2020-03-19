@@ -29,40 +29,80 @@ import {
   Stack,
 } from '../../src/index';
 
+function MyStack({children}) {
+  return (
+    <Stack>
+      <Routes>
+        <Route path="home">
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text>Home</Text>
+          </View>
+        </Route>
+
+        <Route path="settings">
+          {children || (
+            <View style={{flex: 1, backgroundColor: 'red'}}>
+              <Text>Settings</Text>
+            </View>
+          )}
+        </Route>
+
+        <Redirect to="home" />
+      </Routes>
+      <View style={{flexDirection: 'row'}}>
+        <Link to="home">
+          <View style={{height: 50, padding: 5, borderWidth: 1}}>
+            <Text>To Home</Text>
+          </View>
+        </Link>
+        <Link to="settings">
+          <View style={{height: 50, padding: 5, borderWidth: 1}}>
+            <Text>To Settings</Text>
+          </View>
+        </Link>
+      </View>
+    </Stack>
+  );
+}
+
+function NestedStacks() {
+  return (
+    <MyStack>
+      <MyStack>
+        <MyStack>
+          <MyStack>
+            <MyStack>
+              <MyStack>
+                <MyStack>
+                  <MyStack>
+                    <MyStack>
+                      <MyStack>
+                        <MyStack>
+                          <MyStack />
+                        </MyStack>
+                      </MyStack>
+                    </MyStack>
+                  </MyStack>
+                </MyStack>
+              </MyStack>
+            </MyStack>
+          </MyStack>
+        </MyStack>
+      </MyStack>
+    </MyStack>
+  );
+}
+
 function App() {
   return (
     <SafeAreaView style={{flex: 1}}>
       <NativeRouter>
-        <Stack>
-          <Routes>
-            <Route path="home">
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text>Home</Text>
-              </View>
-            </Route>
-
-            <Route path="settings">
-              <View style={{flex: 1, backgroundColor: 'red'}}>
-                <Text>Settings</Text>
-              </View>
-            </Route>
-
-            <Redirect to="home" />
-          </Routes>
-
-          <Link to="home">
-            <Text>To Home</Text>
-          </Link>
-          <Link to="settings">
-            <Text>To Settings</Text>
-          </Link>
-        </Stack>
-
+        <MyStack />
         <Location />
       </NativeRouter>
     </SafeAreaView>
