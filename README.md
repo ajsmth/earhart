@@ -18,13 +18,8 @@ function App() {
     <NativeRouter>
       <Tabs>
         <Routes>
-          <Route path="home/*">
-            <Home />
-          </Route>
-
-          <Route path="settings/*">
-            <Settings />
-          </Route>
+          <Home path="home/*" />
+          <Settings path="settings/*" />
 
           <Redirect to="/home" />
         </Routes>
@@ -41,8 +36,6 @@ function App() {
   );
 }
 ```
-
-4. react-router (v6) uses an `element` prop for route components whereas this library uses plain children.
 
 ## How is it the same?
 
@@ -84,7 +77,7 @@ function MyNavigator() {
 
 In order to provide a composable API, there are some magical rules that you should be aware of:
 
-1. All routes need to be declared as a direct child of a `<Routes />` component
+1. All routes need to be declared as a direct child of a `<Routes />` component and need a `path` property
 2. The presentational behaviour of these routes is determined by the nearest parent navigator component (e.g the Stack component in the example above).
 
 Aside from those two things, you have the freedom to render and compose components as you see fit.
