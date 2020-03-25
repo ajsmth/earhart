@@ -102,7 +102,7 @@ function App() {
   return (
     <SafeAreaView style={{flex: 1}}>
       <NativeRouter>
-        <MyStack />
+        <NestedStacks />
         <Location />
       </NativeRouter>
     </SafeAreaView>

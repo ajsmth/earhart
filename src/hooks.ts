@@ -1,19 +1,19 @@
 import React from 'react';
-import {
-  BackHandler,
-  Linking,
-  Alert,
-  Animated,
-  ViewStyle,
-  InteractionManager,
-} from 'react-native';
-import {
-  useRouter,
-  useRoute,
-  useNavigate,
-  useNavigator,
-  IndexContext,
-} from './router';
+import { BackHandler, Linking, Alert, InteractionManager } from 'react-native';
+
+import { HistoryContext, NavigatorContext, IndexContext } from './library';
+
+function useHistory() {
+  return React.useContext(HistoryContext);
+}
+
+function useNavigator() {
+  return React.useContext(NavigatorContext);
+}
+
+function useParams() {
+  return React.useContext(NavigatorContext).params;
+}
 
 function Prompt({ message = '', when = false }) {
   usePrompt({ message, when });
@@ -26,8 +26,8 @@ const HardwareBackPressEventType = 'hardwareBackPress';
  *
  */
 function useHardwareBackButton() {
-  let { history } = useRouter();
-  let navigate = useNavigate();
+  let history = useHistory();
+  let { navigate } = useNavigator();
 
   React.useEffect(() => {
     function handleHardwardBackPress() {
@@ -57,21 +57,21 @@ function useHardwareBackButton() {
 const URLEventType = 'url';
 
 function useDeepLinking() {
-  let navigate = useNavigate();
+  let history = useHistory();
 
   // Get the initial URL
   let firstRender = React.useRef(true);
   if (firstRender.current) {
     firstRender.current = false;
     Linking.getInitialURL().then(url => {
-      if (url) navigate(trimScheme(url));
+      if (url) history.push(trimScheme(url));
     });
   }
 
   // Listen for URL changes
   React.useEffect(() => {
     function handleURLChange(event: { url: string }) {
-      navigate(trimScheme(event.url));
+      history.push(trimScheme(event.url));
     }
 
     Linking.addEventListener(URLEventType, handleURLChange);
@@ -79,7 +79,7 @@ function useDeepLinking() {
     return () => {
       Linking.removeEventListener(URLEventType, handleURLChange);
     };
-  }, [navigate]);
+  }, [history]);
 }
 
 function trimScheme(url: string) {
@@ -109,7 +109,7 @@ function usePrompt({ message = '', when = true }) {
 }
 
 function useBlocker(blocker: Function, when = true) {
-  let { history } = useRouter();
+  let history = useHistory();
 
   React.useEffect(() => {
     if (when) {
@@ -122,7 +122,7 @@ function useBlocker(blocker: Function, when = true) {
             // TODO: Figure out how to re-enable this block if the
             // transition is cancelled for some reason.
             unblock();
-            tx.retry();
+            // tx.retry();
           },
         };
 
@@ -134,35 +134,10 @@ function useBlocker(blocker: Function, when = true) {
   }, [history, when, blocker]);
 }
 
-function useAnimatedOffset(index: number) {
-  const { animatedIndex } = useNavigator();
-
-  const offset = React.useMemo(() => Animated.subtract(index, animatedIndex), [
-    index,
-    animatedIndex,
-  ]);
-
-  return offset;
-}
-
-function useInterpolation(interpolation: any, index?: number) {
-  const routeIndex = React.useContext(IndexContext);
-  index = index !== undefined ? index : routeIndex;
-
-  const offset = useAnimatedOffset(index);
-
-  const styles = React.useMemo(() => {
-    return interpolateWithConfig(offset, interpolation);
-  }, [interpolation, offset]);
-
-  return styles;
-}
-
 function useFocus() {
   const index = React.useContext(IndexContext);
-  const { match } = useNavigator();
-
-  return match ? match.index === index : false;
+  const { activeIndex } = useNavigator();
+  return activeIndex === index;
 }
 
 // ref: https://github.com/react-navigation/hooks/issues/62#issuecomment-593531670
@@ -175,7 +150,7 @@ function useFocusLazy() {
       setIsFocusedLazy(isFocused);
     });
 
-    return () => cancel();
+    return cancel;
   }, [isFocused]);
 
   return isFocusedLazy;
@@ -186,37 +161,10 @@ export {
   useDeepLinking,
   useHardwareBackButton as useAndroidBackButton,
   usePrompt,
-  useInterpolation,
   Prompt,
   useFocus,
   useFocusLazy,
+  useParams,
+  useNavigator,
+  useHistory,
 };
-
-function interpolateWithConfig(
-  offset: Animated.AnimatedSubtraction,
-  pageInterpolation?: any
-): ViewStyle {
-  if (!pageInterpolation) {
-    return {};
-  }
-
-  return Object.keys(pageInterpolation).reduce((styles: any, key: any) => {
-    const currentStyle = pageInterpolation[key];
-
-    if (Array.isArray(currentStyle)) {
-      const _style = currentStyle.map((interpolationConfig: any) =>
-        interpolateWithConfig(offset, interpolationConfig)
-      );
-
-      styles[key] = _style;
-      return styles;
-    }
-
-    if (typeof currentStyle === 'object') {
-      styles[key] = offset.interpolate(currentStyle);
-      return styles;
-    }
-
-    return styles;
-  }, {});
-}

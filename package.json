@@ -17,7 +17,8 @@
   "peerDependencies": {
     "react": ">=16",
     "react-native": "^0.61.4",
-    "react-native-gesture-handler": "^1.6.0"
+    "react-native-gesture-handler": "^1.6.0",
+    "react-native-screens": "^2.4.0"
   },
   "husky": {
     "hooks": {
@@ -48,6 +49,7 @@
     "react-dom": "^16.12.0",
     "react-native": "^0.61.4",
     "react-native-gesture-handler": "^1.6.0",
+    "react-native-screens": "^2.4.0",
     "react-test-renderer": "^16.12.0",
     "ts-jest": "^24.1.0",
     "tsdx": "^0.11.0",
@@ -67,7 +69,7 @@
     }
   },
   "dependencies": {
-    "@types/history": "^4.7.5",
-    "history": "^5.0.0-beta.5"
+    "@types/history": "4",
+    "history": "4"
   }
 }

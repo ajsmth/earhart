@@ -1,6 +1,6 @@
 # earhart
 
-earhart is a fork of react-router (v6) tailored to the needs of React Native applications
+earhart is a router tailored to the needs of React Native applications
 
 ## How is it different?
 
@@ -11,44 +11,51 @@ earhart is a fork of react-router (v6) tailored to the needs of React Native app
 3. The API is slightly different - most native navigation libraries provide primitive components like Tabs, Stack, and Switch, and the same goes for this library. Your routes are grouped by these components, and the end result looks something like this:
 
 ```javascript
-import { NativeRouter, Tabs, Routes, Route, Link, Redirect } from 'earhart';
+import { Router, Tabs, Route, Link } from 'earhart';
 
 function App() {
   return (
-    <NativeRouter>
-      <Tabs>
-        <Routes>
-          <Home path="home/*" />
-          <Settings path="settings/*" />
+    <Router>
+      <Navigator>
+        <Tabs>
+          <Route path="/home">
+            <Home />
+          </Route>
 
-          <Redirect to="/home" />
-        </Routes>
+          <Route path="/settings">
+            <Settings />
+          </Route>
+        </Tabs>
 
-        <Link to="home">
+        <Link to="/home">
           <Text>To home</Text>
         </Link>
 
-        <Link to="settings">
+        <Link to="/settings">
           <Text>To settings</Text>
         </Link>
-      </Tabs>
-    </NativeRouter>
+      </Navigator>
+    </Router>
   );
 }
 ```
 
+4. Reduced number of rerenders, as they are more costly in React Native than in the DOM - this is something that is hard to do with react-router currently.
+
 ## How is it the same?
 
-The majority of the routing logic, hooks, and components are pretty much unmodified from react-router
+The hooks and components are very similar in functionality to react-router and react-navigation.
 
 ## Installation
 
 ```bash
-yarn add earhart react-native-gesture-handler
+yarn add earhart react-native-gesture-handler react-native-screens
 ```
 
 The gesture handler has additional installation steps that are outlined here:
 https://software-mansion.github.io/react-native-gesture-handler/docs/getting-started.html#installation
+
+`react-native-screens` also requires consumers to use the exported `enableScreens()` in the index file of their app
 
 ## Concepts
 
@@ -60,51 +67,84 @@ They are all the same in that only one route is focused at a time, and they shar
 function MyNavigator() {
   // this could be stack, or switch ,or tabs:
   return (
-    <Stack>
+    <Navigator>
       <MyHeader />
 
-      <Routes>
+      <Stack>
         <Route path="/" />
-        <Route path="hello" />
-        <Route path="joe" />
-      </Routes>
+        <Route path="/hello" />
+        <Route path="/hello/joe" />
+      </Stack>
 
       <MyFooter />
-    </Stack>
+    </Navigator>
   );
 }
 ```
 
-In order to provide a composable API, there are some magical rules that you should be aware of:
+In order to provide a composable API, there is some necessary markup that you should be aware of. All routes need to be declared as a direct child of a the screen container component (Tabs / Stack / Switch) and need a `path` prop.
 
-1. All routes need to be declared as a direct child of a `<Routes />` component and need a `path` property
-2. The presentational behaviour of these routes is determined by the nearest parent navigator component (e.g the Stack component in the example above).
-
-Aside from those two things, you have the freedom to render and compose components as you see fit.
+This library only supports absolute paths for the time being.
 
 ## Navigating around
 
-react-router (v6) introduced a new `navigate()` function along with the concept of relative pathing. Accessing the navigate function in your components is achievable with hooks:
+Accessing the navigate function in your components is achievable with hooks:
 
 ```javascript
 function MyForm() {
   const navigator = useNavigator()
 
   function onSubmit() {
-    submit(form).then(() => navigator.navigate('../success'))
+    submit(form).then(() => navigator.navigate('/my-form/success'), { replace: true })
   }
 
   return ...
 }
 ```
 
+## Components
+
+### Router
+
+This is the top level provider component, rendered once at the root of your app. It takes `initialEntries` and `initialIndex` - the same props as `react-router` to setup the initial location for your app.
+
+### Navigator
+
+The navigator wraps around a set of sibling screens that are somehow related. Takes an `initialIndex` prop to specify the default view that will be rendered on mount. The screens themselves are rendered by one of the screen containers (Tabs, Stack, Switch). Only one screen is ever in focus, and it will always be the highest ranking route declared in the navigators screen container.
+
+### Tabs, Stack, Switch
+
+The three screen containers provided by this library, these will bring into focus the active screen based on the current location of the app. Under the hood, Switch and Stack are native components provided by react-native-screens.
+
+### Route
+
+Requires will render its children when the app location matches the declared path prop.
+The way in which it will become active (e.g transition in/out) depends on the parent screen container (Tabs, Stack, Switch).
+
+### Link
+
+Link will set the current location of the app when a user presses it.
+
+The `to` prop declares what the new location will be set to.
+
+The optional `options` prop lets you configure how the history will be updated:
+
+- `options.replace` will replace the current location with the one declared on the Link.
+- `options.latest` will find the most recent matching path to the path declared on the Link and push that view - this is useful for preserving the navigation state of nested routes when linking from more distant parts of the app.
+
+## Hooks
+
+- `useParams()`
+- `useNavigator()`
+- `useHistory()`
+- `useFocus()`
+- `useFocusLazy()`
+
 ## Future plans and addons
 
 ### Navigators
 
-- native stack: https://github.com/ajsmth/earhart-native
-- native switch: https://github.com/ajsmth/earhart-native
-- shared element transitions: https://github.com/ajsmth/earhart-shared-element
+- shared element transitions - WIP
 
 ### Utilities
 
