@@ -27,14 +27,6 @@ function findFocused(container: NativeTestInstance): NativeTestInstance {
   return screens[matchIndex];
 }
 
-function getFocused(container: NativeTestInstance) {
-  const focusedScreen = findFocused(container);
-  return {
-    container: focusedScreen,
-    ...getQueriesForElement(focusedScreen),
-  };
-}
-
 type IOptions = Omit<RenderOptions, 'queries'>;
 
 function render(ui: any, options?: IOptions) {
@@ -56,35 +48,21 @@ function render(ui: any, options?: IOptions) {
     },
   };
 
-  const utils = rtlRender(ui, { ...defaultOptions, ...options });
-
-  const containerQueries: Queries = {};
-  const focusedQueries = {};
-
-  Object.keys(utils).forEach((key: string) => {
-    // patch all queries by defaulted to search within focused screen
-    if (key.includes('find') || key.includes('query') || key.includes('get')) {
-      // @ts-ignore
-      focusedQueries[key] = args => getFocused(utils.container)[key](args);
-      // @ts-ignore
-      containerQueries[key] = args => utils[key](args);
-    }
-  });
-
-  function debug(container?: NativeTestInstance) {
-    if (container) {
-      utils.debug(container);
-    } else {
-      const focused = findFocused(utils.container);
-      utils.debug(focused);
-    }
+  function getFocused(container: NativeTestInstance) {
+    const focusedScreen = findFocused(container);
+    return {
+      container: focusedScreen,
+      debug: () => utils.debug(focusedScreen),
+      ...getQueriesForElement(focusedScreen),
+    };
   }
+
+  const utils = rtlRender(ui, { ...defaultOptions, ...options });
 
   return {
     ...utils,
-    containerQueries,
-    debug,
-    ...focusedQueries,
+    getFocused: (container?: NativeTestInstance) =>
+      getFocused(container || utils.container),
   };
 }
 

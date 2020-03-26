@@ -1,5 +1,5 @@
 {
-  "include": ["src", "types", "example"],
+  "include": ["src", "types", "test-utils.tsx"],
   "compilerOptions": {
     "target": "es5",
     "module": "esnext",
