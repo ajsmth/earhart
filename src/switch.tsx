@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { ScreenContainer, Screen } from 'react-native-screens';
 import { useNavigator } from './hooks';
-import { NavigatorScreen } from 'screen';
+import { NavigatorScreen } from './screen';
 
 interface ISwitch {
   children: React.ReactNode;

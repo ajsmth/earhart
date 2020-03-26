@@ -1,6 +1,6 @@
 # earhart
 
-earhart is a router tailored to the needs of React Native applications
+earhart is a router for React Native applications
 
 ## How is it different?
 
@@ -61,7 +61,7 @@ https://software-mansion.github.io/react-native-gesture-handler/docs/getting-sta
 
 earhart is built around the idea of navigators, which are components that manage a set of routes. Each navigator differs in how it presents its routes and how a user can interact with them. A tabs navigator allows users to swipe between adjacent routes, a stack navigator stacks routes on top of eachother, and a switch navigator renders one route at a time.
 
-They are all the same in that only one route is focused at a time, and they share the same general API:
+They are all the same in that only one route is focused in them at a time, and they share the same general API:
 
 ```javascript
 function MyNavigator() {

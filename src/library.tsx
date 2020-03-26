@@ -2,6 +2,7 @@ import React from 'react';
 import { createMemoryHistory, MemoryHistory } from 'history';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ViewStyle, View } from 'react-native';
+import { ScreenProps, StackPresentationTypes } from 'react-native-screens';
 
 interface IRouter {
   children: React.ReactNode;
@@ -97,6 +98,8 @@ function Navigator({ children, style, initialIndex = 0 }: INavigator) {
         history.go(to);
         return;
       }
+
+      to = generatePath(to, params);
 
       if (options.latest) {
         const entries = history.entries;
@@ -198,9 +201,20 @@ function findMatch(routes: string[], location: string) {
   };
 }
 
-interface IRoute {
+/**
+ * Creates a path with params interpolated.
+ */
+export function generatePath(pathname: string, params: any = {}) {
+  return pathname
+    .replace(/:(\w+)/g, (_, key) => params[key] || `:${key}`)
+    .replace(/\*$/, splat => params[splat] || splat);
+}
+
+interface IRoute extends Omit<ScreenProps, 'stackPresentation'> {
   children: any;
   path: string;
+  stackPresentation?: StackPresentationTypes;
+  header: any;
 }
 
 function Route({ children, path }: IRoute) {

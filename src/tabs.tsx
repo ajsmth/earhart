@@ -30,16 +30,16 @@ function Tabs({ children, animatedValue }: ITabs) {
 
   const [layout, setLayout] = React.useState<LayoutRectangle>(EMPTY_RECT);
 
-  const routes = React.Children.map(
-    children,
-    (child: any) => child.props.path as string
-  );
-
   function handleLayout(event: LayoutChangeEvent) {
     setLayout(event.nativeEvent.layout);
   }
 
   function handleGestureChange(nextIndex: number) {
+    const routes = React.Children.map(
+      children,
+      (child: any) => child.props.path as string
+    );
+
     const route = routes[nextIndex];
 
     if (route) {

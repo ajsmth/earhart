@@ -18,99 +18,156 @@ import {
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
+import {enableScreens, ScreenStackHeaderConfig} from 'react-native-screens';
+
+enableScreens();
+
 import {
-  NativeRouter,
-  Tabs,
-  Routes,
+  Router,
   Route,
   Link,
-  Redirect,
-  useRouter,
   Stack,
+  Navigator,
+  useHistory,
 } from '../../src/index';
 
-function MyStack({children}) {
+function Home() {
   return (
-    <Stack>
-      <Routes>
-        <Route path="home">
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text>Home</Text>
-          </View>
-        </Route>
-
-        <Route path="settings">
-          {children || (
-            <View style={{flex: 1, backgroundColor: 'red'}}>
-              <Text>Settings</Text>
-            </View>
-          )}
-        </Route>
-
-        <Redirect to="home" />
-      </Routes>
-      <View style={{flexDirection: 'row'}}>
-        <Link to="home">
-          <View style={{height: 50, padding: 5, borderWidth: 1}}>
-            <Text>To Home</Text>
-          </View>
-        </Link>
-        <Link to="settings">
-          <View style={{height: 50, padding: 5, borderWidth: 1}}>
-            <Text>To Settings</Text>
-          </View>
-        </Link>
-      </View>
-    </Stack>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
+      }}>
+      <Text>Home</Text>
+    </View>
   );
 }
 
-function NestedStacks() {
+function Settings() {
   return (
-    <MyStack>
-      <MyStack>
-        <MyStack>
-          <MyStack>
-            <MyStack>
-              <MyStack>
-                <MyStack>
-                  <MyStack>
-                    <MyStack>
-                      <MyStack>
-                        <MyStack>
-                          <MyStack />
-                        </MyStack>
-                      </MyStack>
-                    </MyStack>
-                  </MyStack>
-                </MyStack>
-              </MyStack>
-            </MyStack>
-          </MyStack>
-        </MyStack>
-      </MyStack>
-    </MyStack>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
+      }}>
+      <Text>Settings</Text>
+    </View>
+  );
+}
+
+function Profile() {
+  return (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
+      }}>
+      <Text>Profile</Text>
+    </View>
+  );
+}
+
+function MyStack() {
+  return (
+    <Navigator>
+      {({params}: any) => {
+        return (
+          <>
+            <Stack>
+              <Route
+                path="/home"
+                header={
+                  <ScreenStackHeaderConfig
+                    title="Home"
+                    largeTitle
+                    backgroundColor="transparent"
+                  />
+                }>
+                <Home />
+              </Route>
+
+              <Route
+                path="/settings"
+                header={
+                  <ScreenStackHeaderConfig
+                    title="Settings"
+                    largeTitle
+                    backgroundColor="transparent"
+                  />
+                }>
+                <Settings />
+              </Route>
+
+              <Route
+                path="/profile/:id"
+                header={
+                  <ScreenStackHeaderConfig
+                    title={`Profile: ${params.id}`}
+                    largeTitle
+                    backgroundColor="transparent"
+                  />
+                }>
+                <Profile />
+              </Route>
+            </Stack>
+
+            <View style={{flexDirection: 'row'}}>
+              <Link to="/home">
+                <View style={{height: 50, padding: 5, borderWidth: 1}}>
+                  <Text>To Home</Text>
+                </View>
+              </Link>
+              <Link to="/settings">
+                <View style={{height: 50, padding: 5, borderWidth: 1}}>
+                  <Text>To Settings</Text>
+                </View>
+              </Link>
+
+              <Link to="/profile/123">
+                <View style={{height: 50, padding: 5, borderWidth: 1}}>
+                  <Text>To Profile</Text>
+                </View>
+              </Link>
+            </View>
+          </>
+        );
+      }}
+    </Navigator>
   );
 }
 
 function App() {
   return (
     <SafeAreaView style={{flex: 1}}>
-      <NativeRouter>
-        <NestedStacks />
+      <Router initialEntries={['/home']}>
+        <MyStack />
         <Location />
-      </NativeRouter>
+      </Router>
     </SafeAreaView>
   );
 }
 
+function useLocation() {
+  const history = useHistory();
+  const [location, setLocation] = React.useState(history.location.pathname);
+
+  React.useEffect(() => {
+    return history.listen(location => {
+      setLocation(location.pathname);
+    });
+  }, [history]);
+
+  return location;
+}
+
 function Location() {
-  const {location} = useRouter();
-  return <Text>{location.pathname}</Text>;
+  const location = useLocation();
+  return <Text>{location}</Text>;
 }
 export default App;

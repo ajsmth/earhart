@@ -1,10 +1,7 @@
 import React from 'react';
 import App from '../App';
 
-import {render} from '@testing-library/react-native';
-import {Navigation} from 'earhart';
-
-console.log({Navigation});
+import {render} from '../../../src/test-utils';
 
 test('render()', () => {
   const {debug} = render(<App />);

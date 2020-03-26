@@ -7,10 +7,8 @@ import {
   Queries,
 } from '@testing-library/react-native';
 
-console.log('why?');
-
 function findFocused(container: NativeTestInstance): NativeTestInstance {
-  let screens = queryAllByTestId(container, /rnl-screen/i);
+  let screens = queryAllByTestId(container, /earhart-screen/i);
 
   let maxDepth = 0;
   let matchIndex = 0;
@@ -91,4 +89,4 @@ function render(ui: any, options?: IOptions) {
 }
 
 export * from '@testing-library/react-native';
-// export {render, findFocused};
+export { render, findFocused };

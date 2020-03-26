@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ScreenStack, Screen } from 'react-native-screens';
 import { useNavigator } from './hooks';
-import { NavigatorScreen } from 'screen';
+import { NavigatorScreen } from './screen';
 
 interface IStack {
   children: React.ReactNode;
@@ -15,7 +15,19 @@ interface IStack {
 // bit of a hack but it has no noticeable impact
 
 function Stack({ children }: IStack) {
-  const { activeIndex } = useNavigator();
+  const { activeIndex, navigate } = useNavigator();
+
+  function handleBack() {
+    const routes = React.Children.map(
+      children,
+      (child: any) => child.props.path
+    );
+
+    const nextRoute = routes[activeIndex - 1];
+    if (nextRoute) {
+      navigate(nextRoute);
+    }
+  }
 
   return (
     <>
@@ -25,12 +37,16 @@ function Stack({ children }: IStack) {
             return null;
           }
 
+          const { header, ...screenProps } = child.props;
+
           return (
             <Screen
               stackPresentation="push"
-              active={1}
+              onDismissed={handleBack}
               style={StyleSheet.absoluteFill}
+              {...screenProps}
             >
+              {header || null}
               <View style={{ flex: 1 }}>
                 <NavigatorScreen index={index}>
                   {child.props.children}
