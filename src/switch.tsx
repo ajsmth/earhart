@@ -36,7 +36,6 @@ function Switch({ children }: ISwitch) {
       {React.Children.map(children, (child: any) => {
         return React.cloneElement(child, {
           children: null,
-          style: { flex: 0 },
         });
       })}
     </>

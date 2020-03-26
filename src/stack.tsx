@@ -1,6 +1,14 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { ScreenStack, Screen } from 'react-native-screens';
+import {
+  ScreenStack,
+  Screen,
+  ScreenStackHeaderConfigProps,
+  ScreenStackHeaderConfig,
+  ScreenStackHeaderCenterView,
+  ScreenStackHeaderLeftView,
+  ScreenStackHeaderRightView,
+} from 'react-native-screens';
 import { useNavigator } from './hooks';
 import { NavigatorScreen } from './screen';
 
@@ -37,16 +45,22 @@ function Stack({ children }: IStack) {
             return null;
           }
 
-          const { header, ...screenProps } = child.props;
+          let header = null;
+
+          if (Array.isArray(child.props.children)) {
+            header = child.props.children.find(
+              (c: any) => c.type.earhartHeader
+            );
+          }
 
           return (
             <Screen
               stackPresentation="push"
               onDismissed={handleBack}
               style={StyleSheet.absoluteFill}
-              {...screenProps}
+              {...child.props}
             >
-              {header || null}
+              {header}
               <View style={{ flex: 1 }}>
                 <NavigatorScreen index={index}>
                   {child.props.children}
@@ -60,11 +74,20 @@ function Stack({ children }: IStack) {
       {React.Children.map(children, (child: any) => {
         return React.cloneElement(child, {
           children: null,
-          style: { flex: 0 },
         });
       })}
     </>
   );
 }
 
-export { Stack };
+function Header(props: ScreenStackHeaderConfigProps) {
+  return <ScreenStackHeaderConfig {...props} />;
+}
+
+Header.earhartHeader = true;
+
+Header.Left = ScreenStackHeaderLeftView;
+Header.Right = ScreenStackHeaderRightView;
+Header.Center = ScreenStackHeaderCenterView;
+
+export { Stack, Header };

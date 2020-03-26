@@ -214,7 +214,7 @@ interface IRoute extends Omit<ScreenProps, 'stackPresentation'> {
   children: any;
   path: string;
   stackPresentation?: StackPresentationTypes;
-  header: any;
+  header?: any;
 }
 
 function Route({ children, path }: IRoute) {

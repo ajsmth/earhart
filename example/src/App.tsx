@@ -27,8 +27,11 @@ import {
   Route,
   Link,
   Stack,
+  Switch,
+  Tabs,
   Navigator,
   useHistory,
+  Header,
 } from '../../src/index';
 
 function Home() {
@@ -80,39 +83,27 @@ function MyStack() {
         return (
           <>
             <Stack>
-              <Route
-                path="/home"
-                header={
-                  <ScreenStackHeaderConfig
-                    title="Home"
-                    largeTitle
-                    backgroundColor="transparent"
-                  />
-                }>
+              <Route path="/home">
+                <Header title="Home" largeTitle backgroundColor="transparent" />
                 <Home />
               </Route>
 
-              <Route
-                path="/settings"
-                header={
-                  <ScreenStackHeaderConfig
-                    title="Settings"
-                    largeTitle
-                    backgroundColor="transparent"
-                  />
-                }>
+              <Route path="/settings">
+                <Header
+                  title="Settings"
+                  largeTitle
+                  backgroundColor="transparent"
+                />
                 <Settings />
               </Route>
 
-              <Route
-                path="/profile/:id"
-                header={
-                  <ScreenStackHeaderConfig
-                    title={`Profile: ${params.id}`}
-                    largeTitle
-                    backgroundColor="transparent"
-                  />
-                }>
+              <Route path="/profile/:id">
+                <Header
+                  title={`Profile: ${params.id}`}
+                  largeTitle
+                  backgroundColor="transparent"
+                />
+
                 <Profile />
               </Route>
             </Stack>
@@ -144,12 +135,10 @@ function MyStack() {
 
 function App() {
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <Router initialEntries={['/home']}>
-        <MyStack />
-        <Location />
-      </Router>
-    </SafeAreaView>
+    <Router initialEntries={['/home']}>
+      <MyStack />
+      <Location />
+    </Router>
   );
 }
 

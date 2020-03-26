@@ -2,7 +2,7 @@
 
 earhart is a router for React Native applications
 
-## How is it different?
+## How is it different from other routing libraries?
 
 1. Native applications often need to hold onto more implicit state than web ones, so this library tends to keep views alive instead of unmounting them. For example, navigating between tabs doesn't reset scroll position or unmount any components unless you want it to.
 
@@ -110,7 +110,7 @@ This is the top level provider component, rendered once at the root of your app.
 
 ### Navigator
 
-The navigator wraps around a set of sibling screens that are somehow related. Takes an `initialIndex` prop to specify the default view that will be rendered on mount. The screens themselves are rendered by one of the screen containers (Tabs, Stack, Switch). Only one screen is ever in focus, and it will always be the highest ranking route declared in the navigators screen container.
+The navigator wraps around a set of sibling screens that are somehow related. Takes an `initialIndex` prop to specify the default view that will be rendered on mount. The screens themselves are rendered by one of the screen containers (Tabs, Stack, Switch). Only one screen is ever in focus.
 
 ### Tabs, Stack, Switch
 
@@ -118,8 +118,12 @@ The three screen containers provided by this library, these will bring into focu
 
 ### Route
 
-Requires will render its children when the app location matches the declared path prop.
-The way in which it will become active (e.g transition in/out) depends on the parent screen container (Tabs, Stack, Switch).
+Routes will render their children when the app location best matches the declared path prop for a given navigator.
+The way in which it will become active (e.g transition in/out) depends on the parent screen container (Tabs, Stack, Switch). Route takes additional props when a member of Stack which correspond to the screen props found in `react-native-screens`.
+
+### Header
+
+The Header component applies to screens that are rendered in a Stack - the props available are the same as those defined by `react-native-screens` header config. Header should be a direct child of a Route component. You can also use `Header.Left`, `Header.Right`, and `Header.Center` to define custom children inside of your headers.
 
 ### Link
 
