@@ -240,7 +240,7 @@ function Link({ to, children, options, style }: ILink) {
 
   const _navigate = React.useCallback(() => {
     navigate(to, options);
-  }, [navigate]);
+  }, [navigate, to, options]);
 
   return (
     <TouchableOpacity containerStyle={style} onPress={_navigate}>
