@@ -5,6 +5,7 @@ import {
   Screen,
   ScreenStackHeaderConfigProps,
   ScreenStackHeaderConfig,
+  // @ts-ignore
   ScreenStackHeaderCenterView,
   ScreenStackHeaderLeftView,
   ScreenStackHeaderRightView,
