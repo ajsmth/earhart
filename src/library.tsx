@@ -33,11 +33,17 @@ function Router({ children, initialEntries, initialIndex }: IRouter) {
 
 const RegisterRouteContext = React.createContext((route: string) => {});
 
-const NavigatorContext = React.createContext({
+const NavigatorContext = React.createContext<INavigatorState>({
   activeIndex: 0,
   params: {},
-  navigate: (to: string | number, options?: INavigateOptions) => {},
+  navigate: () => {},
 });
+
+export interface INavigatorState {
+  activeIndex: number;
+  params: Object;
+  navigate: (to: string | number, options?: INavigateOptions) => void;
+}
 
 interface INavigator {
   children: React.ReactNode;
@@ -49,6 +55,9 @@ function Navigator({ children, style, initialIndex = 0 }: INavigator) {
   const { params: parentParams } = React.useContext(NavigatorContext);
 
   const history = React.useContext(HistoryContext);
+
+  const [activeIndex, setActiveIndex] = React.useState(initialIndex);
+  const [params, setParams] = React.useState(parentParams);
 
   const update = React.useCallback((location: string) => {
     const routes = subscriptions.current;
@@ -87,9 +96,6 @@ function Navigator({ children, style, initialIndex = 0 }: INavigator) {
     return unsub;
   }, []);
 
-  const [activeIndex, setActiveIndex] = React.useState(initialIndex);
-  const [params, setParams] = React.useState(parentParams);
-
   const navigate = React.useCallback(
     (to: string | number, options?: INavigateOptions) => {
       options = options || {};
@@ -123,7 +129,7 @@ function Navigator({ children, style, initialIndex = 0 }: INavigator) {
     [history]
   );
 
-  const context = { activeIndex, params, navigate };
+  const context: INavigatorState = { activeIndex, params, navigate };
 
   return (
     <NavigatorContext.Provider value={context}>

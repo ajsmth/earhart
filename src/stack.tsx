@@ -39,19 +39,29 @@ function Stack({ children }: IStack) {
   }
 
   return (
-    <>
-      <ScreenStack style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
+      <ScreenStack style={StyleSheet.absoluteFill}>
         {React.Children.map(children, (child: any, index) => {
           if (index > activeIndex) {
             return null;
           }
 
           let header = null;
+          let _children: any[] = [];
 
+          // extract header from route children
+          // android will render <HeaderConfig /> even if its nested so it needs to be removed
           if (Array.isArray(child.props.children)) {
-            header = child.props.children.find(
-              (c: any) => c.type.earhartHeader
-            );
+            for (let i = 0; i < child.props.children.length; i++) {
+              const _child = child.props.children[i];
+              if (_child.type.earhartHeader) {
+                header = _child;
+              } else {
+                _children.push(_child);
+              }
+            }
+          } else {
+            _children = child.props.children;
           }
 
           return (
@@ -59,13 +69,12 @@ function Stack({ children }: IStack) {
               stackPresentation="push"
               onDismissed={handleBack}
               style={StyleSheet.absoluteFill}
+              pointerEvents={index === activeIndex ? 'auto' : 'none'}
               {...child.props}
             >
               {header}
-              <View style={{ flex: 1 }}>
-                <NavigatorScreen index={index}>
-                  {child.props.children}
-                </NavigatorScreen>
+              <View style={StyleSheet.absoluteFill}>
+                <NavigatorScreen index={index}>{_children}</NavigatorScreen>
               </View>
             </Screen>
           );
@@ -77,7 +86,7 @@ function Stack({ children }: IStack) {
           children: null,
         });
       })}
-    </>
+    </View>
   );
 }
 

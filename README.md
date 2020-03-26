@@ -11,7 +11,7 @@ earhart is a router for React Native applications
 3. The API is slightly different - most native navigation libraries provide primitive components like Tabs, Stack, and Switch, and the same goes for this library. Your routes are grouped by these components, and the end result looks something like this:
 
 ```javascript
-import { Router, Tabs, Route, Link } from 'earhart';
+import { Router, Tabs, Route, Link, Navigator } from 'earhart';
 
 function App() {
   return (

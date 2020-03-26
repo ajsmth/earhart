@@ -6,6 +6,7 @@ import { NavigatorScreen } from './screen';
 
 interface ISwitch {
   children: React.ReactNode;
+  keepAlive?: boolean;
 }
 
 // RNS doens't allow rendering non-<Screen /> children
@@ -14,7 +15,7 @@ interface ISwitch {
 // routes are properly registered and everything works fine
 // bit of a hack but it has no noticeable impact
 
-function Switch({ children }: ISwitch) {
+function Switch({ children, keepAlive = true }: ISwitch) {
   const { activeIndex } = useNavigator();
 
   return (
@@ -27,7 +28,11 @@ function Switch({ children }: ISwitch) {
             // @ts-ignore
             <Screen active={active} style={StyleSheet.absoluteFill}>
               <NavigatorScreen index={index}>
-                {child.props.children}
+                {keepAlive
+                  ? child.props.children
+                  : active
+                  ? child.props.children
+                  : null}
               </NavigatorScreen>
             </Screen>
           );
