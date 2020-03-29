@@ -146,7 +146,7 @@ The optional `options` prop lets you configure how the history will be updated:
 
 ## Creating your own API
 
-One of the nice things about having composition is that you can abstract navigators into their own components to tailor the API that makes the most sense for you. As an example, if we wanted our own stack navigator:
+One of the nice things about having composition is that you can abstract navigators into their own components. As an example, if we wanted our own stack navigator:
 
 ```js
 // example usage we might want:
