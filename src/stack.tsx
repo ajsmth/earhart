@@ -104,6 +104,7 @@ function extractHeaderProps(
   navigatorState: INavigatorState
 ) {
   return Object.keys(props).reduce((acc, val: string) => {
+    // @ts-ignore
     const prop = props[val];
 
     if (typeof prop === 'function') {
