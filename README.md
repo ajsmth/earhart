@@ -182,7 +182,7 @@ function MyStackNavigator({ children }) {
 
 ### Navigators
 
-- shared element transitions - WIP
+- shared element transitions: https://github.com/ajsmth/earhart-shared-element
 
 ### Utilities
 
