@@ -12,6 +12,7 @@ import {
 } from 'react-native-screens';
 import { useNavigator } from './hooks';
 import { NavigatorScreen } from './screen';
+import { INavigatorState } from './library';
 
 interface IStack {
   children: React.ReactNode;
@@ -24,7 +25,7 @@ interface IStack {
 // bit of a hack but it has no noticeable impact
 
 function Stack({ children }: IStack) {
-  const { activeIndex, navigate } = useNavigator();
+  const { activeIndex, navigate, params } = useNavigator();
 
   function handleBack() {
     const routes = React.Children.map(
@@ -46,7 +47,10 @@ function Stack({ children }: IStack) {
             return null;
           }
 
-          let header = null;
+          let headerProps: Partial<ScreenStackHeaderConfigProps> = {
+            hidden: true,
+          };
+
           let _children: any[] = [];
 
           // extract header from route children
@@ -55,7 +59,11 @@ function Stack({ children }: IStack) {
             for (let i = 0; i < child.props.children.length; i++) {
               const _child = child.props.children[i];
               if (_child.type.earhartHeader) {
-                header = _child;
+                headerProps = extractHeaderProps(_child.props, {
+                  activeIndex,
+                  navigate,
+                  params,
+                });
               } else {
                 _children.push(_child);
               }
@@ -72,7 +80,8 @@ function Stack({ children }: IStack) {
               pointerEvents={index === activeIndex ? 'auto' : 'none'}
               {...child.props}
             >
-              {header}
+              <ScreenStackHeaderConfig {...headerProps} />
+
               <View style={StyleSheet.absoluteFill}>
                 <NavigatorScreen index={index}>{_children}</NavigatorScreen>
               </View>
@@ -90,8 +99,35 @@ function Stack({ children }: IStack) {
   );
 }
 
-function Header(props: ScreenStackHeaderConfigProps) {
-  return <ScreenStackHeaderConfig {...props} />;
+function extractHeaderProps(
+  props: ScreenStackHeaderConfigProps,
+  navigatorState: INavigatorState
+) {
+  return Object.keys(props).reduce((acc, val: string) => {
+    const prop = props[val];
+
+    if (typeof prop === 'function') {
+      return {
+        ...acc,
+        [val]: prop(navigatorState),
+      };
+    }
+
+    return {
+      ...acc,
+      [val]: prop,
+    };
+  }, {});
+}
+
+type DynamicHeaderProp = (navigatorState: INavigatorState) => string;
+
+interface IHeaderProps extends Omit<ScreenStackHeaderConfigProps, 'title'> {
+  title?: string | DynamicHeaderProp;
+}
+
+function Header(props: IHeaderProps) {
+  return null;
 }
 
 Header.earhartHeader = true;

@@ -41,7 +41,7 @@ const NavigatorContext = React.createContext<INavigatorState>({
 
 export interface INavigatorState {
   activeIndex: number;
-  params: Object;
+  params: any;
   navigate: (to: string | number, options?: INavigateOptions) => void;
 }
 
@@ -105,7 +105,9 @@ function Navigator({ children, style, initialIndex = 0 }: INavigator) {
         return;
       }
 
-      to = generatePath(to, params);
+      if (to.includes(':')) {
+        to = generatePath(to, params);
+      }
 
       if (options.latest) {
         const entries = history.entries;
@@ -113,6 +115,12 @@ function Navigator({ children, style, initialIndex = 0 }: INavigator) {
           const entry = entries[i];
 
           if (entry && entry.pathname.includes(to)) {
+            // already pushed this view - revert to original specified valu
+            if (i === entries.length - 1) {
+              history.push(to);
+              return;
+            }
+
             history.push(entry);
             return;
           }
@@ -126,7 +134,7 @@ function Navigator({ children, style, initialIndex = 0 }: INavigator) {
 
       history.push(to);
     },
-    [history]
+    [history, params]
   );
 
   const context: INavigatorState = { activeIndex, params, navigate };
@@ -187,6 +195,7 @@ function findMatch(routes: string[], location: string) {
         continue;
       }
 
+      // definite no match - break early
       rank += -3;
       break;
     }

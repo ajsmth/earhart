@@ -144,6 +144,40 @@ The optional `options` prop lets you configure how the history will be updated:
 - `useFocus()`
 - `useFocusLazy()`
 
+## Creating your own API
+
+One of the nice things about having composition is that you can abstract navigators into their own components to tailor the API that makes the most sense for you. As an example, if we wanted our own stack navigator:
+
+```js
+// example usage we might want:
+function Signup() {
+  return (
+    <MyStackNavigator>
+      <Welcome path="/signup" title="Welcome!" />
+      <UserInfo path="/signup/user" title="Signup" />
+      <Success path="/signup/success" title="Congrats!" />
+    </MyStackNavigator>
+  );
+}
+
+function MyStackNavigator({ children }) {
+  return (
+    <Navigator>
+      <Stack>
+        {React.Children.map(children, child => {
+          return (
+            <Route path={child.props.path}>
+              <Header title={child.props.title} />
+              {child}
+            </Route>
+          );
+        })}
+      </Stack>
+    </Navigator>
+  );
+}
+```
+
 ## Future plans and addons
 
 ### Navigators

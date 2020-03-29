@@ -11,8 +11,8 @@ function useNavigator() {
   return React.useContext(NavigatorContext);
 }
 
-function useParams() {
-  return React.useContext(NavigatorContext).params;
+function useParams<T>() {
+  return React.useContext(NavigatorContext).params as Partial<T>;
 }
 
 function Prompt({ message = '', when = false }) {
