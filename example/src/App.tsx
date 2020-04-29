@@ -31,6 +31,7 @@ import {
   useHistory,
   Header,
   useNavigator,
+  useLocation,
 } from '../../src/index';
 
 function Home() {
@@ -152,21 +153,9 @@ function App() {
     <Router initialEntries={['/home']}>
       <MyStack />
       <Location />
+      <SafeAreaView />
     </Router>
   );
-}
-
-function useLocation() {
-  const history = useHistory();
-  const [location, setLocation] = React.useState(history.location.pathname);
-
-  React.useEffect(() => {
-    return history.listen(location => {
-      setLocation(location.pathname);
-    });
-  }, [history]);
-
-  return location;
 }
 
 function Location() {

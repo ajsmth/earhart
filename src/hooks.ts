@@ -156,6 +156,20 @@ function useFocusLazy() {
   return isFocusedLazy;
 }
 
+// returns the current location string of the router
+function useLocation() {
+  const history = useHistory();
+  const [location, setLocation] = React.useState(history.location.pathname);
+
+  React.useEffect(() => {
+    return history.listen(location => {
+      setLocation(location.pathname);
+    });
+  }, [history]);
+
+  return location;
+}
+
 export {
   useBlocker,
   useDeepLinking,
@@ -167,4 +181,5 @@ export {
   useParams,
   useNavigator,
   useHistory,
+  useLocation,
 };
