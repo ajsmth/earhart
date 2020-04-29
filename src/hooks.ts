@@ -136,8 +136,8 @@ function useBlocker(blocker: Function, when = true) {
 
 function useFocus() {
   const index = React.useContext(IndexContext);
-  const { activeIndex } = useNavigator();
-  return activeIndex === index;
+  const { activeIndex, focused } = useNavigator();
+  return focused && activeIndex === index;
 }
 
 // ref: https://github.com/react-navigation/hooks/issues/62#issuecomment-593531670

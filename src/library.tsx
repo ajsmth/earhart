@@ -26,7 +26,7 @@ function Router({ children, initialEntries, initialIndex }: IRouter) {
 
   return (
     <HistoryContext.Provider value={history.current}>
-      {children}
+      <IndexContext.Provider value={0}>{children}</IndexContext.Provider>
     </HistoryContext.Provider>
   );
 }
@@ -37,11 +37,13 @@ const NavigatorContext = React.createContext<INavigatorState>({
   activeIndex: 0,
   params: {},
   navigate: () => {},
+  focused: true,
 });
 
 export interface INavigatorState {
   activeIndex: number;
   params: any;
+  focused: boolean;
   navigate: (to: string | number, options?: INavigateOptions) => void;
 }
 
@@ -52,7 +54,14 @@ interface INavigator {
 }
 
 function Navigator({ children, style, initialIndex = 0 }: INavigator) {
-  const { params: parentParams } = React.useContext(NavigatorContext);
+  const {
+    params: parentParams,
+    activeIndex: parentActiveIndex,
+    focused: parentFocused,
+  } = React.useContext(NavigatorContext);
+
+  const index = React.useContext(IndexContext);
+  const focused = parentActiveIndex === index && parentFocused;
 
   const history = React.useContext(HistoryContext);
 
@@ -65,7 +74,7 @@ function Navigator({ children, style, initialIndex = 0 }: INavigator) {
 
     if (match.activeIndex > -1) {
       setActiveIndex(match.activeIndex);
-      setParams((p: any) => {
+      setParams(p => {
         return {
           ...p,
           ...match.params,
@@ -115,9 +124,9 @@ function Navigator({ children, style, initialIndex = 0 }: INavigator) {
           const entry = entries[i];
 
           if (entry && entry.pathname.includes(to)) {
-            // already pushed this view - revert to original specified valu
+            // already pushed this view - revert to original specified value
             if (i === entries.length - 1) {
-              history.push(to);
+              history.go(i - history.index);
               return;
             }
 
@@ -137,7 +146,7 @@ function Navigator({ children, style, initialIndex = 0 }: INavigator) {
     [history, params]
   );
 
-  const context: INavigatorState = { activeIndex, params, navigate };
+  const context: INavigatorState = { activeIndex, params, navigate, focused };
 
   return (
     <NavigatorContext.Provider value={context}>
