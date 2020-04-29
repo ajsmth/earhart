@@ -125,6 +125,17 @@ The way in which it will become active (e.g transition in/out) depends on the pa
 
 The Header component applies to screens that are rendered in a Stack - the props available are the same as those defined by `react-native-screens` header config. Header should be a direct child of a Route component. You can also use `Header.Left`, `Header.Right`, and `Header.Center` to define custom children inside of your headers.
 
+Usage:
+
+```tsx
+<Route
+  path="/settings"
+  header={<Header title="Settings" backgroundColor="transparent" largeTitle />}
+>
+  <Settings />
+</Route>
+```
+
 ### Link
 
 Link will set the current location of the app when a user presses it.
