@@ -27,11 +27,10 @@ import {
   Route,
   Link,
   Stack,
-  Switch,
-  Tabs,
   Navigator,
   useHistory,
   Header,
+  useNavigator,
 } from '../../src/index';
 
 function Home() {
@@ -83,27 +82,31 @@ function MyStack() {
         return (
           <>
             <Stack>
-              <Route path="/home">
-                <Header title="Home" largeTitle backgroundColor="transparent" />
+              <Route
+                path="/home"
+                header={
+                  <Header
+                    title="Home"
+                    largeTitle
+                    backgroundColor="transparent"
+                  />
+                }>
                 <Home />
               </Route>
 
-              <Route path="/settings">
-                <Header
-                  title="Settings"
-                  largeTitle
-                  backgroundColor="transparent"
-                />
+              <Route
+                path="/settings"
+                header={
+                  <Header
+                    title="Settings"
+                    largeTitle
+                    backgroundColor="transparent"
+                  />
+                }>
                 <Settings />
               </Route>
 
-              <Route path="/profile/:id">
-                <Header
-                  title={`Profile: ${params.id}`}
-                  largeTitle
-                  backgroundColor="transparent"
-                />
-
+              <Route path="/profile/:id" header={<ProfileHeader />}>
                 <Profile />
               </Route>
             </Stack>
@@ -133,6 +136,17 @@ function MyStack() {
   );
 }
 
+function ProfileHeader() {
+  const navigatorState = useNavigator();
+
+  return (
+    <Header
+      title={`Profile: ${navigatorState.params.id}`}
+      largeTitle
+      backgroundColor="transparent"
+    />
+  );
+}
 function App() {
   return (
     <Router initialEntries={['/home']}>
