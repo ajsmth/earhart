@@ -74,7 +74,7 @@ function Navigator({ children, style, initialIndex = 0 }: INavigator) {
 
     if (match.activeIndex > -1) {
       setActiveIndex(match.activeIndex);
-      setParams(p => {
+      setParams((p: any) => {
         return {
           ...p,
           ...match.params,
