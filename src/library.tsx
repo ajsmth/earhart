@@ -256,10 +256,9 @@ interface ILink extends TouchableOpacityProps {
   to: string | number;
   options?: INavigateOptions;
   children: React.ReactNode;
-  style?: ViewStyle;
 }
 
-function Link({ to, children, options, style, ...rest }: ILink) {
+function Link({ to, children, options, ...rest }: ILink) {
   const { navigate } = React.useContext(NavigatorContext);
 
   const _navigate = React.useCallback(() => {
@@ -267,7 +266,7 @@ function Link({ to, children, options, style, ...rest }: ILink) {
   }, [navigate, to, options]);
 
   return (
-    <TouchableOpacity {...rest} containerStyle={style} onPress={_navigate}>
+    <TouchableOpacity {...rest} onPress={_navigate}>
       {children}
     </TouchableOpacity>
   );
