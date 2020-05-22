@@ -252,15 +252,14 @@ function Route({ children, path }: IRoute) {
   return children;
 }
 
-interface ILink {
+interface ILink extends TouchableOpacityProps {
   to: string | number;
   options?: INavigateOptions;
   children: React.ReactNode;
   style?: ViewStyle;
-  touchableProps?: TouchableOpacityProps;
 }
 
-function Link({ to, children, options, style, touchableProps }: ILink) {
+function Link({ to, children, options, style, ...rest }: ILink) {
   const { navigate } = React.useContext(NavigatorContext);
 
   const _navigate = React.useCallback(() => {
@@ -268,11 +267,7 @@ function Link({ to, children, options, style, touchableProps }: ILink) {
   }, [navigate, to, options]);
 
   return (
-    <TouchableOpacity
-      {...(touchableProps || {})}
-      containerStyle={style}
-      onPress={_navigate}
-    >
+    <TouchableOpacity {...rest} containerStyle={style} onPress={_navigate}>
       {children}
     </TouchableOpacity>
   );
