@@ -1,7 +1,7 @@
 import React from 'react';
 import { createMemoryHistory, MemoryHistory } from 'history';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { ViewStyle, View } from 'react-native';
+import { ViewStyle, View, TouchableOpacityProps } from 'react-native';
 import { ScreenProps, StackPresentationTypes } from 'react-native-screens';
 
 interface IRouter {
@@ -252,14 +252,13 @@ function Route({ children, path }: IRoute) {
   return children;
 }
 
-interface ILink {
+interface ILink extends TouchableOpacityProps {
   to: string | number;
   options?: INavigateOptions;
   children: React.ReactNode;
-  style?: ViewStyle;
 }
 
-function Link({ to, children, options, style }: ILink) {
+function Link({ to, children, options, ...rest }: ILink) {
   const { navigate } = React.useContext(NavigatorContext);
 
   const _navigate = React.useCallback(() => {
@@ -267,7 +266,7 @@ function Link({ to, children, options, style }: ILink) {
   }, [navigate, to, options]);
 
   return (
-    <TouchableOpacity containerStyle={style} onPress={_navigate}>
+    <TouchableOpacity {...rest} onPress={_navigate}>
       {children}
     </TouchableOpacity>
   );
