@@ -16,7 +16,7 @@
   },
   "peerDependencies": {
     "react": ">=16",
-    "react-native": "^0.61.4",
+    "react-native": "^0.62.3",
     "react-native-gesture-handler": "^1.6.0",
     "react-native-screens": "^2.4.0"
   },
@@ -47,7 +47,7 @@
     "pretty-quick": "^2.0.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-native": "^0.61.4",
+    "react-native": "^0.62.3",
     "react-native-gesture-handler": "^1.6.0",
     "react-native-screens": "^2.4.0",
     "react-test-renderer": "^16.12.0",
